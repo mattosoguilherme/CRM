@@ -3,6 +3,7 @@ import { DoctorService } from './doctor.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Doctor } from '@prisma/client';
 
 @ApiTags('doctor')
 @Controller('doctor')
@@ -11,8 +12,8 @@ export class DoctorController {
 
   @Post()
   @ApiOperation({summary:"Cadastro de médico"})
-  create(@Body() createDoctorDto: CreateDoctorDto) {
-    return this.doctorService.create(createDoctorDto);
+  create(@Body() createDoctorDto: CreateDoctorDto): Promise<Doctor> {
+    return  this.doctorService.create(createDoctorDto);
   }
 
   @Get()
@@ -24,7 +25,7 @@ export class DoctorController {
   @Get(':id')
   @ApiOperation({summary:"Lista um médico pelo ID "})
   findOne(@Param('id') id: string) {
-    return this.doctorService.findOne(+id);
+    return this.doctorService.findOne(id);
   }
 
   @Patch(':id')

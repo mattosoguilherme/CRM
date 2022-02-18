@@ -1,19 +1,74 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma.service';
+import { Doctor } from '@prisma/client';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @Injectable()
 export class DoctorService {
-  create(createDoctorDto: CreateDoctorDto) {
-    return 'This action adds a new doctor';
+  constructor(private prismaService: PrismaService) {}
+
+  async create(createDoctorDto: CreateDoctorDto): Promise<Doctor> {
+    const { cep, name, crm, cell_phone, medical_specialty, landline } =
+      createDoctorDto;
+
+    const doctorCreatred = await this.prismaService.doctor.create({
+      data: {
+        name: name,
+        crm: crm,
+        cell_phone: cell_phone,
+        medical_specialty: medical_specialty,
+        landline: landline,
+        cep: cep,
+      },
+    });
+
+    return doctorCreatred;
   }
 
-  findAll() {
-    return `This action returns all doctor`;
+  async findAll(): Promise<Doctor[]> {
+    return await this.prismaService.doctor.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} doctor`;
+  async findOne(id: string): Promise<Doctor> {
+     
+     return await this.prismaService.doctor.findUnique({ where: { id: id } });
+    }
+
+  async findName(field:any): Promise<Doctor> {
+
+    return await this.prismaService.doctor.findFirst({})
+
+  }
+
+  async findCRM(field:any): Promise<Doctor> {
+
+    return await this.prismaService.doctor.findFirst({})
+
+  }
+
+  async findLandline(field:any): Promise<Doctor> {
+
+    return await this.prismaService.doctor.findFirst({})
+
+  }
+
+  async findCellPhone(field:any): Promise<Doctor> {
+
+    return await this.prismaService.doctor.findFirst({})
+
+  }
+
+  async findFields(field:any): Promise<Doctor> {
+
+    return await this.prismaService.doctor.findFirst({})
+
+  }
+
+  async findSpeciality(field:any): Promise<Doctor> {
+
+    return await this.prismaService.doctor.findFirst({})
+
   }
 
   update(id: number, updateDoctorDto: UpdateDoctorDto) {

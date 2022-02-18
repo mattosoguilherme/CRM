@@ -6,6 +6,18 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Doctor {
+  id                String @id @default(uuid())
+  name              String
+  crm               Int    @unique
+  landline          Int
+  cell_phone        Int
+  cep               Int
+  medical_specialty String
+
+  @@map("doctor")
 }

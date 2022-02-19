@@ -65,7 +65,7 @@ export class DoctorService {
       uf,
     } = updateDoctorDto;
 
-    await this.validation.findDoctorByCrm(crm)
+    await this.validation.findDoctorByCrm(crm);
 
     const fieldEdited = await this.validation.fieldsValidator(updateDoctorDto);
 
@@ -152,7 +152,10 @@ export class DoctorService {
   }
 
   async remove(id: string) {
+    const doctor = await this.validation.findDoctorById(id);
 
-    return await this.validation.findDoctorById(id)  ;
+    await this.prismaService.doctor.delete({ where: { id: id } });
+    
+    return doctor;
   }
 }

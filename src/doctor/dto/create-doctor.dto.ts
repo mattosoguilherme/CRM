@@ -10,22 +10,22 @@ export class CreateDoctorDto {
 
   @ApiProperty({default:'1234567'}) 
   @IsNotEmpty({message:"Você precisa preencher este campo."})
-  @IsNumber()
-  crm: number;
+  @IsString({message:"Esse campo precisar ser um texto."})
+  crm: string;
 
   @ApiProperty({default:'113333456'}) 
   @IsNotEmpty({message:"Você precisa preencher este campo."})
-  @IsNumber()
-  landline: number;
+  @IsString({message:"Esse campo precisar ser um texto."})
+  landline: string;
 
   @ApiProperty({default:'11999998765'}) 
   @IsNotEmpty({message:"Você precisa preencher este campo."})
-  @IsNumber()
-  cell_phone: number;
+  @IsString({message:"Esse campo precisar ser um texto."})
+  cell_phone: string;
 
   @ApiProperty({default:'8710680'})
   @IsNotEmpty({message:"Você precisa preencher este campo."}) 
-  @IsString()
+  @IsString({message:"Esse campo precisar ser um texto."})
   cep: string;
 
   @ApiProperty({default:'Ap 33 bloco B'})  

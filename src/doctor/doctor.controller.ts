@@ -44,25 +44,25 @@ export class DoctorController {
 
   @Get('/findCRM/:CRM')
   @ApiOperation({ summary: 'Busca no banco médicos pelo CRM' })
-  findCRM(@Param('CRM') CRM: number): Promise<Doctor> {
+  findCRM(@Param('CRM') CRM: string): Promise<Doctor> {
     return this.doctorService.findCRM(CRM);
   }
 
   @Get('/findLandline/:landline')
   @ApiOperation({ summary: 'Busca no banco médicos pelo telefone fixo' })
-  findLandline(@Param('landline') landline: number): Promise<Doctor> {
+  findLandline(@Param('landline') landline: string): Promise<Doctor> {
     return this.doctorService.findLandline(landline);
   }
 
   @Get('/findCellPhone/:cellPhone')
   @ApiOperation({ summary: 'Busca no banco médicos pelo telefone celular' })
-  findCellPhone(@Param('cellPhone') cellPhone: number): Promise<Doctor> {
+  findCellPhone(@Param('cellPhone') cellPhone: string): Promise<Doctor> {
     return this.doctorService.findCellPhone(cellPhone);
   }
 
   @Get('/findCep/:cep')
   @ApiOperation({ summary: 'Busca no banco médicos pelo telefone celular' })
-  findCep(@Param('cep') cep: number): Promise<Doctor> {
+  findCep(@Param('cep') cep: string): Promise<Doctor> {
     return this.doctorService.findCep(cep);
   }
 

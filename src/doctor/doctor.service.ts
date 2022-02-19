@@ -5,6 +5,7 @@ import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 import { Validation } from 'src/validations';
+import DoctorDto from './dto/doctor.dto';
 
 @Injectable()
 export class DoctorService {
@@ -24,21 +25,28 @@ export class DoctorService {
       landline,
     } = createDoctorDto;
 
-    console.log(crm)
-    
-    await this.validation.crmValidator (crm)
+    const fields = {
+      name,
+      cep,
+      crm,
+      cell_phone,
+      landline,
+    };
 
-    const adress = await this.validation.SearchAdress(Number(cep));
-    
+    const fieldEdited =  await this.validation.fieldsValidator(fields);
+
+    await this.validation.crmValidator(crm);
+
+    const adress = await this.validation.SearchAdress(cep);
 
     const doctorCreatred = await this.prismaService.doctor.create({
       data: {
-        name: name,
+        name: fieldEdited.name,
         crm: crm,
         cell_phone: cell_phone,
         medical_specialty: medical_specialty,
         landline: landline,
-        cep: Number(cep),
+        cep: cep,
         logradouro: adress.logradouro,
         localidade: adress.localidade,
         bairro: adress.bairro,
@@ -58,18 +66,44 @@ export class DoctorService {
     return await this.prismaService.doctor.findUnique({ where: { id: id } });
   }
 
-  async findCRM(field: number): Promise<Doctor> {
-    return await this.validation.findDoctorByCrm(field)
+  async findCRM(field: string): Promise<Doctor> {
+    return await this.validation.findDoctorByCrm(field);
   }
 
   async update(id: string, updateDoctorDto: UpdateDoctorDto) {
+    const {
+      complement,
+      cep,
+      name,
+      crm,
+      cell_phone,
+      medical_specialty,
+      landline,
+    } = updateDoctorDto;
 
+    console.log(updateDoctorDto);
 
+    const doctor = await this.validation.findDoctorById(id);
 
-    return `This action updates a #${id} doctor`;
+    const adress = await this.validation.SearchAdress(cep);
+
+    return await this.prismaService.doctor.update({
+      where: { id: doctor.id },
+      data: {
+        name: name,
+        crm: crm,
+        cell_phone: cell_phone,
+        medical_specialty: medical_specialty,
+        landline: landline,
+        cep: cep,
+        logradouro: adress.logradouro,
+        localidade: adress.localidade,
+        bairro: adress.bairro,
+        uf: adress.uf,
+        complement: complement,
+      },
+    });
   }
-
-
 
   async findName(field: string): Promise<Doctor> {
     const nome = await this.prismaService.doctor.findFirst({
@@ -99,7 +133,6 @@ export class DoctorService {
       where: { medical_specialty: field },
     });
   }
-
 
   remove(id: number) {
     return `This action removes a #${id} doctor`;

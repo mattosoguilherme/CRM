@@ -10,11 +10,11 @@ datasource db {
 model Doctor {
   id                String   @id @default(uuid())
   name              String   @db.VarChar(120)
-  crm               Int      @unique
-  landline          Int
-  cell_phone        Int
+  crm               String   @unique @db.VarChar(7)
+  landline          String   @db.VarChar(10)
+  cell_phone        String   @db.VarChar(11)
+  cep               String   @db.VarChar(8)
   medical_specialty String
-  cep               Int
   logradouro        String
   bairro            String
   localidade        String

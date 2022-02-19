@@ -12,25 +12,33 @@ export class UpdateDoctorDto {
     @IsNotEmpty({message:"Você precisa preencher este campo."})
     @IsNumber()
     @IsOptional()
-    crm: Number;
+    crm: string;
   
     @ApiProperty({default:'123456'}) 
     @IsNotEmpty({message:"Você precisa preencher este campo."})
     @IsNumber()
     @IsOptional()
-    landline: number;
+    landline: string;
   
     @ApiProperty({default:'123456'}) 
     @IsNotEmpty({message:"Você precisa preencher este campo."})
     @IsNumber()
     @IsOptional()
-    cell_phone: number;
+    cell_phone: string;
   
     @ApiProperty({default:'123456'})
     @IsNotEmpty({message:"Você precisa preencher este campo."}) 
     @IsNumber()
     @IsOptional()
-    cep: number;
+    cep: string;
+
+    logradouro:string;
+    
+    bairro:string;
+
+    localidade:string;
+
+    uf:string;
 
     @ApiProperty({default:'Ap 33 bloco B'})  
     @IsString({message:"Esse campo precisar ser um texto."})

@@ -36,6 +36,18 @@ export class DoctorController {
     return this.doctorService.findById(id);
   }
 
+  @Patch(':id')
+  @ApiOperation({ summary: 'Atualiza o cadastro do médico' })
+  update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {
+    return this.doctorService.update(id, updateDoctorDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Apaga cadastro do médico' })
+  remove(@Param('id') id: string) {
+    return this.doctorService.remove(id);
+  }
+
   @Get('/findName/:name')
   @ApiOperation({ summary: 'Busca no banco médicos pelo nome' })
   findName(@Param('name') name: string): Promise<Doctor> {
@@ -64,17 +76,5 @@ export class DoctorController {
   @ApiOperation({ summary: 'Busca no banco médicos pelo telefone celular' })
   findCep(@Param('cep') cep: string): Promise<Doctor> {
     return this.doctorService.findCep(cep);
-  }
-
-  @Patch(':id')
-  @ApiOperation({ summary: 'Atualiza o cadastro do médico' })
-  update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {
-    return this.doctorService.update(id, updateDoctorDto);
-  }
-
-  @Delete(':id')
-  @ApiOperation({ summary: 'Apaga cadastro do médico' })
-  remove(@Param('id') id: string) {
-    return this.doctorService.remove(+id);
   }
 }

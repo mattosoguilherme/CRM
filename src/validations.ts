@@ -38,11 +38,6 @@ export class Validation {
   }
 
   async crmValidator(crm: string): Promise<Doctor> {
-    const crmDoctor = crm.length;
-    if (crmDoctor < 7) {
-      throw new ConflictException('O crm deve ter 7 digitos');
-    }
-
     const c = await this.prismaServive.doctor.findUnique({
       where: { crm: crm },
     });
@@ -55,19 +50,17 @@ export class Validation {
   }
 
   async findDoctorByCrm(crm: string): Promise<Doctor> {
-    const crmDoctor = crm.length;
-    if (crmDoctor < 7) {
-      throw new ConflictException('O crm deve ter 7 digitos');
-    }
-    const crmFinded = await this.prismaServive.doctor.findUnique({
-      where: { crm: crm },
-    });
+    if (crm) {
+      const crmFinded = await this.prismaServive.doctor.findUnique({
+        where: { crm: crm },
+      });
 
-    if (!crmFinded) {
-      throw new NotFoundException(`O CRM: ${crm} não está cadastrado.`);
-    }
+      if (!crmFinded) {
+        throw new NotFoundException(`O CRM: ${crm} não está cadastrado.`);
+      }
 
-    return crmFinded;
+      return crmFinded;
+    }
   }
 
   async findDoctorById(id: string): Promise<Doctor> {
@@ -91,44 +84,58 @@ export class Validation {
       arr[x] = arr[x].charAt(0).toUpperCase() + arr[x].slice(1);
     }
 
-    const fieldEdited ={
-      ...field, 
-      name: arr.join(" "),
+    const fieldEdited = {
+      ...field,
+      name: arr.join(' '),
+    };
+
+    if (crm) {
+      if (isNaN(Number(crm))) {
+        throw new ConflictException(
+          'Campo CRM aceita somente números. Por gentileza insera as informações novamente.',
+        );
+      }
+      if (crm.length !== 7) {
+        throw new ConflictException('O CRM deve ter 7 digitos.');
+      }
+    } else if (landline) {
+      if (isNaN(Number(landline))) {
+        throw new ConflictException(
+          'Campo landline aceita somente números. Por gentileza insera as informações novamente.',
+        );
+      }
+
+      if (landline.length !== 10) {
+        throw new ConflictException('O campo landline deve ter 10 digitos.');
+      }
+    } else if (cell_phone) {
+      if (isNaN(Number(cell_phone))) {
+        throw new ConflictException(
+          'Campo cell_phone aceita somente números. Por gentileza insera as informações novamente.',
+        );
+      }
+
+      if (cell_phone.length !== 11) {
+        throw new ConflictException('O campo cell_phone deve ter 11 digitos');
+      }
+    } else if (cep) {
+      if (isNaN(Number(cep))) {
+        throw new ConflictException(
+          'Campo cep  aceita somente números. Por gentileza insera as informações novamente.',
+        );
+      }
+
+      if (cep.length !== 8) {
+        throw new ConflictException('O campo cep deve ter 8 digitos');
+      }
+    } else if (name) {
+      if (fieldEdited.name.length > 120) {
+        throw new ConflictException(
+          'O limite de caractéres do campo name é de 120.',
+        );
+      }
     }
 
-    if (isNaN(Number(crm))) {
-      throw new ConflictException(
-        'Campo CRM aceita somente números. Por gentileza insera as informações novamente.',
-      );
-    } else if (isNaN(Number(landline))) {
-      throw new ConflictException(
-        'Campo landline aceita somente números. Por gentileza insera as informações novamente.',
-      );
-    } else if (isNaN(Number(cell_phone))) {
-      throw new ConflictException(
-        'Campo cell_phone aceita somente números. Por gentileza insera as informações novamente.',
-      );
-    } else if (isNaN(Number(cep))) {
-      throw new ConflictException(
-        'Campo cep  aceita somente números. Por gentileza insera as informações novamente.',
-      );
-    }
-
-    if (crm.length !== 7) {
-      throw new ConflictException('O CRM deve ter 7 digitos.');
-    } else if (fieldEdited.name.length > 120) {
-      throw new ConflictException(
-        'O limite de caractéres do campo name é de 120.',
-      );
-    } else if (landline.length !== 10) {
-      throw new ConflictException('O campo landline deve ter 10 digitos.');
-    } else if (cell_phone.length !== 11) {
-      throw new ConflictException('O campo cell_phone deve ter 11 digitos');
-    }
-    if (cep.length !== 8) {
-      throw new ConflictException('O campo cep deve ter 8 digitos');
-    }
-
-    return fieldEdited  ;
+    return fieldEdited;
   }
 }

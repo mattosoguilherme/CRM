@@ -4,13 +4,30 @@ import { Doctor } from '@prisma/client';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
+import { Validation } from 'src/validations';
+
 @Injectable()
 export class DoctorService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private validation: Validation,
+  ) {}
 
   async create(createDoctorDto: CreateDoctorDto): Promise<Doctor> {
-    const { cep, name, crm, cell_phone, medical_specialty, landline } =
-      createDoctorDto;
+    const {
+      complement,
+      cep,
+      name,
+      crm,
+      cell_phone,
+      medical_specialty,
+      landline,
+    } = createDoctorDto;
+
+    await this.validation.crmValidator (crm)
+
+    const adress = await this.validation.SearchAdress(cep);
+
 
     const doctorCreatred = await this.prismaService.doctor.create({
       data: {
@@ -20,6 +37,11 @@ export class DoctorService {
         medical_specialty: medical_specialty,
         landline: landline,
         cep: cep,
+        logradouro: adress.logradouro,
+        localidade: adress.localidade,
+        bairro: adress.bairro,
+        uf: adress.uf,
+        complement: complement,
       },
     });
 
@@ -31,44 +53,42 @@ export class DoctorService {
   }
 
   async findOne(id: string): Promise<Doctor> {
-     
-     return await this.prismaService.doctor.findUnique({ where: { id: id } });
-    }
-
-  async findName(field:any): Promise<Doctor> {
-
-    return await this.prismaService.doctor.findFirst({})
-
+    return await this.prismaService.doctor.findUnique({ where: { id: id } });
   }
 
-  async findCRM(field:any): Promise<Doctor> {
-
-    return await this.prismaService.doctor.findFirst({})
-
+  async findCRM(field: number): Promise<Doctor> {
+    return await this.prismaService.doctor.findUnique({
+      where: { crm: field },
+    });
   }
 
-  async findLandline(field:any): Promise<Doctor> {
-
-    return await this.prismaService.doctor.findFirst({})
-
+  async findName(field: string): Promise<Doctor> {
+    const nome = await this.prismaService.doctor.findFirst({
+      where: { name: field },
+    });
+    return nome;
   }
 
-  async findCellPhone(field:any): Promise<Doctor> {
-
-    return await this.prismaService.doctor.findFirst({})
-
+  async findLandline(field: any): Promise<Doctor> {
+    return await this.prismaService.doctor.findFirst({
+      where: { landline: field },
+    });
   }
 
-  async findFields(field:any): Promise<Doctor> {
-
-    return await this.prismaService.doctor.findFirst({})
-
+  async findCellPhone(field: any): Promise<Doctor> {
+    return await this.prismaService.doctor.findFirst({
+      where: { cell_phone: field },
+    });
   }
 
-  async findSpeciality(field:any): Promise<Doctor> {
+  async findCep(field: any): Promise<Doctor> {
+    return await this.prismaService.doctor.findFirst({ where: { cep: field } });
+  }
 
-    return await this.prismaService.doctor.findFirst({})
-
+  async findSpeciality(field: any): Promise<Doctor> {
+    return await this.prismaService.doctor.findFirst({
+      where: { medical_specialty: field },
+    });
   }
 
   update(id: number, updateDoctorDto: UpdateDoctorDto) {

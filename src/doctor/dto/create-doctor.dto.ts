@@ -28,8 +28,14 @@ export class CreateDoctorDto {
   @IsNumber()
   cep: number;
 
+  @ApiProperty({default:'Ap 33 bloco B'})  
+  @IsString({message:"Esse campo precisar ser um texto."})
+  @IsNotEmpty({message:"Você precisa preencher este campo."})
+  complement:string;
+
   @ApiProperty({default:'Cirurgia de tórax, Cirurgia cardíaca'}) 
   @IsString({message:"Esse precisar ser um texto"})
   @IsNotEmpty({message:"Você precisa preencher este campo."})
   medical_specialty: string;
+
 }

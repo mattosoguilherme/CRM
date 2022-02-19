@@ -25,8 +25,8 @@ export class CreateDoctorDto {
 
   @ApiProperty({default:'8710680'})
   @IsNotEmpty({message:"Você precisa preencher este campo."}) 
-  @IsNumber()
-  cep: number;
+  @IsString()
+  cep: string;
 
   @ApiProperty({default:'Ap 33 bloco B'})  
   @IsString({message:"Esse campo precisar ser um texto."})

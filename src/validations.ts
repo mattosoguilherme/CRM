@@ -22,15 +22,20 @@ export class Validation {
     }
 
     const adress = [];
+    const notAdress = []
 
     await axios
       .get(`https://viacep.com.br/ws/${cep}/json/`)
       .then((r) => {
         adress.push(r.data);
       })
-      .catch(() => {
-        throw new NotFoundException('Cep não encontrado.');
+      .catch((e) => {
+        notAdress.push(e)
       });
+
+    if(notAdress[0]){
+      throw new NotFoundException("Cep não encontrado.")
+    }
 
     return adress[0];
   }

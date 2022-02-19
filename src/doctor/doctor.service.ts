@@ -26,8 +26,8 @@ export class DoctorService {
 
     await this.validation.crmValidator (crm)
 
-    const adress = await this.validation.SearchAdress(cep);
-
+    const adress = await this.validation.SearchAdress(Number(cep));
+    
 
     const doctorCreatred = await this.prismaService.doctor.create({
       data: {
@@ -36,7 +36,7 @@ export class DoctorService {
         cell_phone: cell_phone,
         medical_specialty: medical_specialty,
         landline: landline,
-        cep: cep,
+        cep: Number(cep),
         logradouro: adress.logradouro,
         localidade: adress.localidade,
         bairro: adress.bairro,

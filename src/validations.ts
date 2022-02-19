@@ -22,25 +22,32 @@ export class Validation {
     }
 
     const adress = [];
-    const notAdress = []
+    const notAdress = [];
 
     await axios
       .get(`https://viacep.com.br/ws/${cep}/json/`)
       .then((r) => {
         adress.push(r.data);
+        console.log(r.data)
       })
       .catch((e) => {
-        notAdress.push(e)
+        notAdress.push(e);
+        console.log(e)
       });
 
-    if(notAdress[0]){
-      throw new NotFoundException("Cep não encontrado.")
+    if (notAdress[0]|| adress[0].erro ) {
+      throw new NotFoundException('Cep não encontrado.');
     }
 
     return adress[0];
   }
 
   async crmValidator(crm: number): Promise<Doctor> {
+    const crmDoctor = crm.toString().length;
+    if (crmDoctor < 7) {
+      throw new ConflictException('O crm deve ter 7 digitos');
+    }
+
     const c = await this.prismaServive.doctor.findUnique({
       where: { crm: crm },
     });
@@ -50,5 +57,22 @@ export class Validation {
     }
 
     return;
+  }
+
+  async findDoctorByCrm(crm: number): Promise<Doctor> {
+
+    const crmDoctor = crm.toString().length;
+    if (crmDoctor < 7) {
+      throw new ConflictException('O crm deve ter 7 digitos');
+    }
+    const crmFinded = await this.prismaServive.doctor.findUnique({
+      where: { crm: crm },
+    });
+
+    if(!crmFinded){
+      throw new NotFoundException(`O CRM: ${crm} não está cadastrado.`)
+    }
+
+    return crmFinded;
   }
 }

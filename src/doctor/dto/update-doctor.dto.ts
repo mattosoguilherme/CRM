@@ -8,11 +8,11 @@ export class UpdateDoctorDto {
     @IsOptional()
     name: string;
   
-    @ApiProperty({default:'123456'}) 
+    @ApiProperty({default:'1234567'}) 
     @IsNotEmpty({message:"Você precisa preencher este campo."})
     @IsNumber()
     @IsOptional()
-    crm: number;
+    crm: Number;
   
     @ApiProperty({default:'123456'}) 
     @IsNotEmpty({message:"Você precisa preencher este campo."})
@@ -31,8 +31,14 @@ export class UpdateDoctorDto {
     @IsNumber()
     @IsOptional()
     cep: number;
+
+    @ApiProperty({default:'Ap 33 bloco B'})  
+    @IsString({message:"Esse campo precisar ser um texto."})
+    @IsNotEmpty({message:"Você precisa preencher este campo."})
+    @IsOptional()
+    complement:string;
   
-    @ApiProperty({default:['Atualizado 1','Atualizado 2']}) 
+    @ApiProperty({default:'Atualizado 1, Atualizado 2'}) 
     @IsString({message:"Esse precisar ser um texto"})
     @IsNotEmpty({message:"Você precisa preencher este campo."})
     @IsOptional()

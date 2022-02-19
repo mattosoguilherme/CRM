@@ -24,6 +24,8 @@ export class DoctorService {
       landline,
     } = createDoctorDto;
 
+    console.log(crm)
+    
     await this.validation.crmValidator (crm)
 
     const adress = await this.validation.SearchAdress(Number(cep));
@@ -52,15 +54,22 @@ export class DoctorService {
     return await this.prismaService.doctor.findMany();
   }
 
-  async findOne(id: string): Promise<Doctor> {
+  async findById(id: string): Promise<Doctor> {
     return await this.prismaService.doctor.findUnique({ where: { id: id } });
   }
 
   async findCRM(field: number): Promise<Doctor> {
-    return await this.prismaService.doctor.findUnique({
-      where: { crm: field },
-    });
+    return await this.validation.findDoctorByCrm(field)
   }
+
+  async update(id: string, updateDoctorDto: UpdateDoctorDto) {
+
+
+
+    return `This action updates a #${id} doctor`;
+  }
+
+
 
   async findName(field: string): Promise<Doctor> {
     const nome = await this.prismaService.doctor.findFirst({
@@ -91,9 +100,6 @@ export class DoctorService {
     });
   }
 
-  update(id: number, updateDoctorDto: UpdateDoctorDto) {
-    return `This action updates a #${id} doctor`;
-  }
 
   remove(id: number) {
     return `This action removes a #${id} doctor`;

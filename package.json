@@ -4,7 +4,7 @@
   "engines": {
     "node": "14.17.5"
   },
-  "description": "Projeto CRM Doctor",
+  "description": "CRM Doctor is the medical registration management api",
   "author": "Guilherme Mattoso",
   "private": true,
   "license": "MIT",

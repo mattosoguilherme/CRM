@@ -32,8 +32,8 @@ export class DoctorController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Busca no banco médicos pelo ID ' })
-  findOne(@Param('id') id: string): Promise<Doctor> {
-    return this.doctorService.findOne(id);
+  findById(@Param('id') id: string): Promise<Doctor> {
+    return this.doctorService.findById(id);
   }
 
   @Get('/findName/:name')
@@ -69,7 +69,7 @@ export class DoctorController {
   @Patch(':id')
   @ApiOperation({ summary: 'Atualiza o cadastro do médico' })
   update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {
-    return this.doctorService.update(+id, updateDoctorDto);
+    return this.doctorService.update(id, updateDoctorDto);
   }
 
   @Delete(':id')

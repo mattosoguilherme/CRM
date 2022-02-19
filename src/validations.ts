@@ -7,7 +7,7 @@ import {
 
 import axios from 'axios';
 import { Doctor } from '@prisma/client';
-import DoctorDto from './doctor/dto/doctor.dto';
+import { Z_ASCII } from 'zlib';
 
 @Injectable()
 export class Validation {
@@ -77,8 +77,10 @@ export class Validation {
 
   async fieldsValidator(field: any): Promise<Doctor> {
     const { name, crm, landline, cell_phone, cep } = field;
+    
+    const nameEdited = name.replace(/[^a-zA-Zs]/g, "")
 
-    const arr = name.split(' ');
+    const arr = nameEdited.split(' ');
 
     for (var x = 0; x < arr.length; x++) {
       arr[x] = arr[x].charAt(0).toUpperCase() + arr[x].slice(1);

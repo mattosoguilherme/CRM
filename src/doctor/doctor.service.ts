@@ -5,7 +5,6 @@ import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 import { Validation } from 'src/validations';
-import DoctorDto from './dto/doctor.dto';
 
 @Injectable()
 export class DoctorService {
@@ -122,6 +121,16 @@ export class DoctorService {
     return await this.validation.findDoctorByCrm(field);
   }
 
+  async remove(id: string) {
+    const doctor = await this.validation.findDoctorById(id);
+
+    await this.prismaService.doctor.delete({ where: { id: id } });
+
+    return {
+      message: `Cadastro do(a) Dr(a) ${doctor.name}  deletado com sucesso.`,
+    };
+  }
+
   async findName(field: string): Promise<Doctor> {
     const nome = await this.prismaService.doctor.findFirst({
       where: { name: field },
@@ -149,13 +158,5 @@ export class DoctorService {
     return await this.prismaService.doctor.findFirst({
       where: { medical_specialty: field },
     });
-  }
-
-  async remove(id: string) {
-    const doctor = await this.validation.findDoctorById(id);
-
-    await this.prismaService.doctor.delete({ where: { id: id } });
-    
-    return doctor;
   }
 }

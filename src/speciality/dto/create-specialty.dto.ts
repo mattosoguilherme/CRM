@@ -1,10 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class CreateSpecialityDto {
+export class CreateSpecialtyDto {
 
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
-    speciality:string;
+    specialty:string;
 }

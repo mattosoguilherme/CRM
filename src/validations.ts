@@ -11,7 +11,7 @@ import { CreateDoctorDto } from './doctor/dto/create-doctor.dto';
 
 @Injectable()
 export class Validation {
-  constructor(private prismaServive: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
   async SearchAdress(cep: string) {
     if (cep) {
@@ -38,7 +38,7 @@ export class Validation {
   }
 
   async crmValidator(crm: string): Promise<Doctor> {
-    const c = await this.prismaServive.doctor.findUnique({
+    const c = await this.prismaService.doctor.findUnique({
       where: { crm: crm },
     });
 
@@ -51,7 +51,7 @@ export class Validation {
 
   async findDoctorByCrm(crm: string): Promise<Doctor> {
     if (crm) {
-      const crmFinded = await this.prismaServive.doctor.findUnique({
+      const crmFinded = await this.prismaService.doctor.findUnique({
         where: { crm: crm },
       });
 
@@ -64,7 +64,7 @@ export class Validation {
   }
 
   async findDoctorById(id: string): Promise<Doctor> {
-    const doctorFinded = await this.prismaServive.doctor.findUnique({
+    const doctorFinded = await this.prismaService.doctor.findUnique({
       where: { id: id },
     });
 
@@ -76,7 +76,9 @@ export class Validation {
   }
 
   async fieldsValidator(field: CreateDoctorDto): Promise<CreateDoctorDto> {
-    const { name, crm, landline, cell_phone, cep } = field;
+    const { name, crm, specialty ,landline, cell_phone, cep } = field;
+
+    const specialitys = await this.prismaService.specialty.findMany();
 
     const hasDuplicates = (array) => new Set(array).size !== array.length;
 
@@ -136,17 +138,26 @@ export class Validation {
           'O limite de caractéres do campo name é de 120.',
         );
       }
-    }if(field.specialty){
+    }
+    if (field.specialty) {
+
+
+
       if (field.specialty.length < 2) {
         throw new ConflictException(
           'O médico dever ter no mínimo 2 especialidades',
         );
+      } else if (field.specialty.length > specialitys.length) {
+        throw new ConflictException(
+          `Limite de especialidades por cadastro atingido. Só é permitido, nessa versão, cadastrar ${specialitys.length} especialidades por médico.`,
+        );
       }
-      if(hasDuplicates(field.specialty)){
-        throw new ConflictException("Duplicidade de especialidades não é permitida.")
+      if (hasDuplicates(field.specialty)) {
+        throw new ConflictException(
+          'Duplicidade de especialidades não é permitida.',
+        );
       }
     }
-
 
     return fieldEdited;
   }

@@ -1,11 +1,10 @@
-import {  Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Doctor } from '@prisma/client';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 import { Validation } from 'src/validations';
-
 
 @Injectable()
 export class DoctorService {
@@ -18,6 +17,17 @@ export class DoctorService {
     const { complement, cep, crm, cell_phone, specialty, landline } =
       createDoctorDto;
 
+      specialty.forEach(x => console.log(x))
+
+    for (var x in specialty ) {
+      console.log(x)
+      const specFinded = await this.prismaService.specialty.findUnique({
+        where: { id: Number(x) },
+      });
+      if (!specFinded) {
+        throw new NotFoundException('Id da especialidade não encontrado.');
+      }
+    }
 
     const fieldEdited = await this.validation.fieldsValidator(createDoctorDto);
 
@@ -81,7 +91,7 @@ export class DoctorService {
           bairro: bairro,
           uf: uf,
           complement: complement,
-          Specialty:{connect: specialty.map((s) => ({ id: s }))}
+          Specialty: { connect: specialty.map((s) => ({ id: s })) },
         },
       });
     }
@@ -151,7 +161,7 @@ export class DoctorService {
     return await this.prismaService.doctor.findFirst({ where: { cep: field } });
   }
 
-  async findSpeciality(field: any): Promise<Doctor> {
+  async findSpecialty(field: any): Promise<Doctor> {
     return await this.prismaService.doctor.findFirst({
       where: { Specialty: field },
     });

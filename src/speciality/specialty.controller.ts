@@ -1,14 +1,14 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SpecialityService } from './speciality.service';
-import { CreateSpecialityDto } from './dto/create-speciality.dto';
-import { UpdateSpecialityDto } from './dto/update-speciality.dto';
+import { SpecialtyService } from './specialty.service';
+import { CreateSpecialtyDto } from './dto/create-specialty.dto';
+import { UpdateSpecialtyDto } from './dto/update-specialty.dto';
 
 @Controller('speciality')
-export class SpecialityController {
-  constructor(private readonly specialityService: SpecialityService) {}
+export class SpecialtyController {
+  constructor(private readonly specialityService: SpecialtyService) {}
 
   @Post()
-  create(@Body() createSpecialityDto: CreateSpecialityDto) {
+  create(@Body() createSpecialityDto: CreateSpecialtyDto) {
     return this.specialityService.create(createSpecialityDto);
   }
 
@@ -18,7 +18,7 @@ export class SpecialityController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSpecialityDto: UpdateSpecialityDto) {
+  update(@Param('id') id: string, @Body() updateSpecialityDto: UpdateSpecialtyDto) {
     return this.specialityService.update(+id, updateSpecialityDto);
   }
 

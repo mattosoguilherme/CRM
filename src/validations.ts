@@ -16,7 +16,7 @@ export class Validation {
   async SearchAdress(cep: string) {
     if (cep) {
       const numberCep = Number(cep);
-
+      console.log(numberCep)
       const adress = [];
       const notAdress = [];
 

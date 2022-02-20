@@ -8,20 +8,26 @@ datasource db {
 }
 
 model Doctor {
-  id                String   @id @default(uuid())
-  name              String   @db.VarChar(120)
-  crm               String   @unique @db.VarChar(7)
-  landline          String   @db.VarChar(10)
-  cell_phone        String   @db.VarChar(11)
-  cep               String   @db.VarChar(8)
-  medical_specialty String
+  id                String       @id @default(uuid())
+  name              String       @db.VarChar(120)
+  crm               String       @unique @db.VarChar(7)
+  landline          String       @db.VarChar(10)
+  cell_phone        String       @db.VarChar(11)
+  cep               String       @db.VarChar(8)
+  medical_specialty Speciality[]
   logradouro        String
   bairro            String
   localidade        String
   uf                String
   complement        String
-  createdAT         DateTime @default(now())
-  updatedAT         DateTime @updatedAt()
+  createdAT         DateTime     @default(now())
+  updatedAT         DateTime     @updatedAt()
 
   @@map("doctor")
+}
+
+model Speciality {
+  id         Int      @id @default(autoincrement())
+  speciality String
+  doctors    Doctor[]
 }

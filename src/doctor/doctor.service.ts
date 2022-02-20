@@ -17,17 +17,7 @@ export class DoctorService {
     const { complement, cep, crm, cell_phone, specialty, landline } =
       createDoctorDto;
 
-      specialty.forEach(x => console.log(x))
-
-    for (var x in specialty ) {
-      console.log(x)
-      const specFinded = await this.prismaService.specialty.findUnique({
-        where: { id: Number(x) },
-      });
-      if (!specFinded) {
-        throw new NotFoundException('Id da especialidade não encontrado.');
-      }
-    }
+ 
 
     const fieldEdited = await this.validation.fieldsValidator(createDoctorDto);
 

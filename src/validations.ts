@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 
 import axios from 'axios';
-import { Doctor } from '@prisma/client';
+import { Doctor, Specialty } from '@prisma/client';
 import { CreateDoctorDto } from './doctor/dto/create-doctor.dto';
 
 @Injectable()
@@ -76,7 +76,7 @@ export class Validation {
   }
 
   async fieldsValidator(field: CreateDoctorDto): Promise<CreateDoctorDto> {
-    const { name, crm, specialty ,landline, cell_phone, cep } = field;
+    const { name, crm, landline, cell_phone, cep } = field;
 
     const specialitys = await this.prismaService.specialty.findMany();
 
@@ -140,8 +140,11 @@ export class Validation {
       }
     }
     if (field.specialty) {
-
-
+      field.specialty.forEach((spec) => {
+        if (spec > specialitys.length) {
+          throw new NotFoundException('Id da especialidade não encontrado.');
+        }
+      });
 
       if (field.specialty.length < 2) {
         throw new ConflictException(
@@ -160,5 +163,17 @@ export class Validation {
     }
 
     return fieldEdited;
+  }
+
+  async findSpecById(id: number): Promise<Specialty> {
+    const specFinded = await this.prismaService.specialty.findUnique({
+      where: { id: id },
+    });
+
+    if (!specFinded) {
+      throw new NotFoundException('Id da especialidade não encontrado.');
+    }
+
+    return specFinded;
   }
 }

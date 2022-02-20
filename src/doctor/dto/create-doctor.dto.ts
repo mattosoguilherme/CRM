@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class CreateDoctorDto {
   
@@ -34,8 +34,8 @@ export class CreateDoctorDto {
   complement:string;
 
   @ApiProperty({default:'Cirurgia de tórax, Cirurgia cardíaca'}) 
-  @IsString({message:"Esse precisar ser um texto"})
+  @IsArray()
   @IsNotEmpty({message:"Você precisa preencher este campo."})
-  medical_specialty: string;
+  specialty: number[];
 
 }

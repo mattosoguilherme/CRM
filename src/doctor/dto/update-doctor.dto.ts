@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class UpdateDoctorDto {
     @ApiProperty({default:'Atualizado'})  
@@ -59,9 +59,9 @@ export class UpdateDoctorDto {
     complement:string;
   
     @ApiProperty({default:'Atualizado 1, Atualizado 2'}) 
-    @IsString({message:"Esse campo medical_specialty precisar ser um texto"})
     @IsNotEmpty({message:"Você precisa preencher este campo."})
+    @IsArray()
     @IsOptional()
-    medical_specialty: string;
+    medical_specialty: number[];
 
 }

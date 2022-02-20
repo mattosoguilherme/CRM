@@ -14,15 +14,8 @@ export class DoctorService {
   ) {}
 
   async create(createDoctorDto: CreateDoctorDto): Promise<Doctor> {
-    const {
-      complement,
-      cep,
-      name,
-      crm,
-      cell_phone,
-      medical_specialty,
-      landline,
-    } = createDoctorDto;
+    const { complement, cep, crm, cell_phone, specialty, landline } =
+      createDoctorDto;
 
     const fieldEdited = await this.validation.fieldsValidator(createDoctorDto);
 
@@ -35,7 +28,6 @@ export class DoctorService {
         name: fieldEdited.name,
         crm: crm,
         cell_phone: cell_phone,
-        medical_specialty: medical_specialty,
         landline: landline,
         cep: cep,
         logradouro: adress.logradouro,
@@ -43,6 +35,7 @@ export class DoctorService {
         bairro: adress.bairro,
         uf: adress.uf,
         complement: complement,
+        Specialty: { connect: specialty.map((s) => ({ id: s })) },
       },
     });
 
@@ -79,7 +72,6 @@ export class DoctorService {
           name: fieldEdited.name,
           crm: crm,
           cell_phone: cell_phone,
-          medical_specialty: medical_specialty,
           landline: landline,
           cep: cep,
           logradouro: logradouro,
@@ -97,7 +89,7 @@ export class DoctorService {
         name: fieldEdited.name,
         crm: crm,
         cell_phone: cell_phone,
-        medical_specialty: medical_specialty,
+        Specialty: { connect: updateDoctorDto.medical_specialty.map((s) => ({ id: s })) },
         landline: landline,
         cep: cep,
         logradouro: adress.logradouro,
@@ -156,7 +148,7 @@ export class DoctorService {
 
   async findSpeciality(field: any): Promise<Doctor> {
     return await this.prismaService.doctor.findFirst({
-      where: { medical_specialty: field },
+      where: { Specialty: field },
     });
   }
 }

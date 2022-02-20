@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {  Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Doctor } from '@prisma/client';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 import { Validation } from 'src/validations';
+
 
 @Injectable()
 export class DoctorService {
@@ -16,6 +17,7 @@ export class DoctorService {
   async create(createDoctorDto: CreateDoctorDto): Promise<Doctor> {
     const { complement, cep, crm, cell_phone, specialty, landline } =
       createDoctorDto;
+
 
     const fieldEdited = await this.validation.fieldsValidator(createDoctorDto);
 
@@ -37,6 +39,7 @@ export class DoctorService {
         complement: complement,
         Specialty: { connect: specialty.map((s) => ({ id: s })) },
       },
+      include: { Specialty: true },
     });
 
     return doctorCreatred;
@@ -46,14 +49,13 @@ export class DoctorService {
     const {
       complement,
       cep,
-      name,
       crm,
       cell_phone,
-      medical_specialty,
       landline,
       logradouro,
       localidade,
       bairro,
+      specialty,
       uf,
     } = updateDoctorDto;
 
@@ -79,6 +81,7 @@ export class DoctorService {
           bairro: bairro,
           uf: uf,
           complement: complement,
+          Specialty:{connect: specialty.map((s) => ({ id: s }))}
         },
       });
     }
@@ -89,7 +92,9 @@ export class DoctorService {
         name: fieldEdited.name,
         crm: crm,
         cell_phone: cell_phone,
-        Specialty: { connect: updateDoctorDto.medical_specialty.map((s) => ({ id: s })) },
+        Specialty: {
+          connect: updateDoctorDto.specialty.map((s) => ({ id: s })),
+        },
         landline: landline,
         cep: cep,
         logradouro: adress.logradouro,

@@ -62,6 +62,6 @@ export class UpdateDoctorDto {
     @IsNotEmpty({message:"Você precisa preencher este campo."})
     @IsArray()
     @IsOptional()
-    medical_specialty: number[];
+    specialty: number[];
 
 }

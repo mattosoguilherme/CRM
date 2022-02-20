@@ -7,7 +7,7 @@ import {
 
 import axios from 'axios';
 import { Doctor } from '@prisma/client';
-import { Z_ASCII } from 'zlib';
+import { CreateDoctorDto } from './doctor/dto/create-doctor.dto';
 
 @Injectable()
 export class Validation {
@@ -16,7 +16,7 @@ export class Validation {
   async SearchAdress(cep: string) {
     if (cep) {
       const numberCep = Number(cep);
-      console.log(numberCep)
+      console.log(numberCep);
       const adress = [];
       const notAdress = [];
 
@@ -75,12 +75,12 @@ export class Validation {
     return doctorFinded;
   }
 
-  async fieldsValidator(field: any): Promise<Doctor> {
+  async fieldsValidator(field: CreateDoctorDto): Promise<CreateDoctorDto> {
     const { name, crm, landline, cell_phone, cep } = field;
-    
-    const nameEdited = name.replace(/[^a-zA-Zs]/g, "")
 
-    const arr = nameEdited.split(' ');
+    const hasDuplicates = (array) => new Set(array).size !== array.length;
+
+    const arr = name.split(' ');
 
     for (var x = 0; x < arr.length; x++) {
       arr[x] = arr[x].charAt(0).toUpperCase() + arr[x].slice(1);
@@ -136,7 +136,17 @@ export class Validation {
           'O limite de caractéres do campo name é de 120.',
         );
       }
+    }if(field.specialty){
+      if (field.specialty.length < 2) {
+        throw new ConflictException(
+          'O médico dever ter no mínimo 2 especialidades',
+        );
+      }
+      if(hasDuplicates(field.specialty)){
+        throw new ConflictException("Duplicidade de especialidades não é permitida.")
+      }
     }
+
 
     return fieldEdited;
   }

@@ -18,6 +18,7 @@ export class DoctorService {
       createDoctorDto;
 
     const fieldEdited = await this.validation.fieldsValidator(createDoctorDto);
+    
 
     await this.validation.crmValidator(crm);
 

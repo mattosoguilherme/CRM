@@ -12,7 +12,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "docker-compose up",
+    "start": "nest start",
     "migrate":"npx prisma migrate dev",
     "studio":"npx prisma studio",
     "generate":"npx prisma generate",
@@ -24,7 +24,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"

@@ -17,8 +17,6 @@ export class DoctorService {
     const { complement, cep, crm, cell_phone, specialty, landline } =
       createDoctorDto;
 
- 
-
     const fieldEdited = await this.validation.fieldsValidator(createDoctorDto);
 
     await this.validation.crmValidator(crm);
@@ -83,6 +81,7 @@ export class DoctorService {
           complement: complement,
           Specialty: { connect: specialty.map((s) => ({ id: s })) },
         },
+        include: { Specialty: true },
       });
     }
 
@@ -103,6 +102,7 @@ export class DoctorService {
         uf: adress.uf,
         complement: complement,
       },
+      include: { Specialty: true },
     });
   }
 

@@ -82,17 +82,6 @@ export class Validation {
 
     const hasDuplicates = (array) => new Set(array).size !== array.length;
 
-    const arr = name.split(' ');
-
-    for (var x = 0; x < arr.length; x++) {
-      arr[x] = arr[x].charAt(0).toUpperCase() + arr[x].slice(1);
-    }
-
-    const fieldEdited = {
-      ...field,
-      name: arr.join(' '),
-    };
-
     if (crm) {
       if (isNaN(Number(crm))) {
         throw new ConflictException(
@@ -133,11 +122,26 @@ export class Validation {
         throw new ConflictException('O campo cep deve ter 8 digitos');
       }
     } else if (name) {
+      const arr = name.split(' ');
+
+      for (var x = 0; x < arr.length; x++) {
+        arr[x] = arr[x].charAt(0).toUpperCase() + arr[x].slice(1);
+      }
+
+      const nEdited = arr.join();
+
+      const fieldEdited = {
+        ...field,
+        name: nEdited,
+      };
+
       if (fieldEdited.name.length > 120) {
         throw new ConflictException(
           'O limite de caractéres do campo name é de 120.',
         );
       }
+
+      return fieldEdited;
     }
     if (field.specialty) {
       field.specialty.forEach((spec) => {
@@ -162,7 +166,7 @@ export class Validation {
       }
     }
 
-    return fieldEdited;
+    return;
   }
 
   async findSpecById(id: number): Promise<Specialty> {

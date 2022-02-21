@@ -10,7 +10,7 @@ import {
 import { DoctorService } from './doctor.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {  ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Doctor } from '@prisma/client';
 
 @ApiTags('doctor')

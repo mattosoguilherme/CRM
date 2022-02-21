@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgres"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -19,9 +19,9 @@ model Doctor {
   localidade String
   uf         String
   complement String
-  Specialty  Specialty[]
   createdAT  DateTime    @default(now())
-  updatedAT  DateTime    @updatedAt()
+  updatedAT  DateTime    @updatedAt
+  Specialty  Specialty[]
 
   @@map("doctor")
 }

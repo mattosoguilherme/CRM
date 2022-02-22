@@ -91,7 +91,9 @@ export class Validation {
       if (crm.length !== 7) {
         throw new ConflictException('O CRM deve ter 7 digitos.');
       }
-    } else if (landline) {
+    }
+
+    if (landline) {
       if (isNaN(Number(landline))) {
         throw new ConflictException(
           'Campo landline aceita somente números. Por gentileza insera as informações novamente.',
@@ -101,7 +103,9 @@ export class Validation {
       if (landline.length !== 10) {
         throw new ConflictException('O campo landline deve ter 10 digitos.');
       }
-    } else if (cell_phone) {
+    }
+
+    if (cell_phone) {
       if (isNaN(Number(cell_phone))) {
         throw new ConflictException(
           'Campo cell_phone aceita somente números. Por gentileza insera as informações novamente.',
@@ -111,7 +115,9 @@ export class Validation {
       if (cell_phone.length !== 11) {
         throw new ConflictException('O campo cell_phone deve ter 11 digitos');
       }
-    } else if (cep) {
+    }
+
+    if (cep) {
       if (isNaN(Number(cep))) {
         throw new ConflictException(
           'Campo cep  aceita somente números. Por gentileza insera as informações novamente.',
@@ -121,14 +127,19 @@ export class Validation {
       if (cep.length !== 8) {
         throw new ConflictException('O campo cep deve ter 8 digitos');
       }
-    } else if (name) {
-      const arr = name.split(' ');
+    }
+
+    if (name) {
+      const arr = field.name.split(' ');
 
       for (var x = 0; x < arr.length; x++) {
         arr[x] = arr[x].charAt(0).toUpperCase() + arr[x].slice(1);
       }
 
-      const nEdited = arr.join();
+      
+      const n = arr.join()
+      
+      const nEdited =  n.replace(',', " ")
 
       const fieldEdited = {
         ...field,
@@ -143,6 +154,7 @@ export class Validation {
 
       return fieldEdited;
     }
+
     if (field.specialty) {
       field.specialty.forEach((spec) => {
         if (spec > specialitys.length) {

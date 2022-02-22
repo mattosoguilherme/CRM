@@ -36,6 +36,21 @@ export class DoctorController {
     return this.doctorService.findById(id);
   }
 
+  @Get('search/uf/:uf')
+  @ApiOperation({
+    summary: 'Busca no db todos os médicos com a uf indicada no parametro',
+  })
+  findDoctorsByUf(@Param('uf') uf: string): Promise<Doctor[]> {
+    return this.doctorService.findDoctorsByUf(uf);
+  }
+
+  @Get("/search/specialty/:spec")
+  @ApiOperation({summary:'Retorna todos os médicos com especialidade indicada no parametro, através do Id de especialidade.'})
+  findDoctorsBySpecialty(@Param('spec') spec: number): Promise<Doctor[]>{
+    return this.doctorService.findDoctorsBySpecialty(spec)
+  }
+
+
   @Patch(':id')
   @ApiOperation({ summary: 'Atualiza o cadastro do médico' })
   update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {
@@ -46,35 +61,5 @@ export class DoctorController {
   @ApiOperation({ summary: 'Apaga cadastro do médico' })
   remove(@Param('id') id: string) {
     return this.doctorService.remove(id);
-  }
-
-  @Get('/findName/:name')
-  @ApiOperation({ summary: 'Busca no banco médicos pelo nome' })
-  findName(@Param('name') name: string): Promise<Doctor> {
-    return this.doctorService.findName(name);
-  }
-
-  @Get('/findCRM/:CRM')
-  @ApiOperation({ summary: 'Busca no banco médicos pelo CRM' })
-  findCRM(@Param('CRM') CRM: string): Promise<Doctor> {
-    return this.doctorService.findCRM(CRM);
-  }
-
-  @Get('/findLandline/:landline')
-  @ApiOperation({ summary: 'Busca no banco médicos pelo telefone fixo' })
-  findLandline(@Param('landline') landline: string): Promise<Doctor> {
-    return this.doctorService.findLandline(landline);
-  }
-
-  @Get('/findCellPhone/:cellPhone')
-  @ApiOperation({ summary: 'Busca no banco médicos pelo telefone celular' })
-  findCellPhone(@Param('cellPhone') cellPhone: string): Promise<Doctor> {
-    return this.doctorService.findCellPhone(cellPhone);
-  }
-
-  @Get('/findCep/:cep')
-  @ApiOperation({ summary: 'Busca no banco médicos pelo telefone celular' })
-  findCep(@Param('cep') cep: string): Promise<Doctor> {
-    return this.doctorService.findCep(cep);
   }
 }

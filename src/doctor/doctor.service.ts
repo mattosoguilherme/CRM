@@ -14,10 +14,11 @@ export class DoctorService {
   ) {}
 
   async create(createDoctorDto: CreateDoctorDto): Promise<Doctor> {
-    const { complement, cep, crm, cell_phone, specialty, landline } =
+    const {complement, cep, crm, cell_phone, specialty, landline } =
       createDoctorDto;
 
     const fieldEdited = await this.validation.fieldsValidator(createDoctorDto);
+
     
 
     await this.validation.crmValidator(crm);
@@ -119,6 +120,35 @@ export class DoctorService {
     return await this.validation.findDoctorByCrm(field);
   }
 
+  async findDoctorsByUf(uf: string): Promise<Doctor[]> {
+    const doctorsFinded: Array<Doctor> = [];
+
+    const findUf = await this.prismaService.doctor.findFirst({
+      where: { uf: uf },
+    });
+
+    if (!findUf) {
+      throw new NotFoundException('Uf não existe ou não está cadastrada.');
+    }
+
+    const doctors = await this.prismaService.doctor.findMany();
+    console.log(doctors)
+    doctors.map((d) => {
+      if (d.uf === uf) {
+        console.log(d)
+        doctorsFinded.push(d);
+      }
+    });
+
+    return doctorsFinded;
+  }
+
+  async findDoctorsBySpecialty(spec: number): Promise<Doctor[]> {
+    const docFindedBySpec = await this.prismaService.doctor.findMany()
+
+    return docFindedBySpec;
+  }
+
   async remove(id: string) {
     const doctor = await this.validation.findDoctorById(id);
 
@@ -127,34 +157,5 @@ export class DoctorService {
     return {
       message: `Cadastro do(a) Dr(a) ${doctor.name}  deletado com sucesso.`,
     };
-  }
-
-  async findName(field: string): Promise<Doctor> {
-    const nome = await this.prismaService.doctor.findFirst({
-      where: { name: field },
-    });
-    return nome;
-  }
-
-  async findLandline(field: any): Promise<Doctor> {
-    return await this.prismaService.doctor.findFirst({
-      where: { landline: field },
-    });
-  }
-
-  async findCellPhone(field: any): Promise<Doctor> {
-    return await this.prismaService.doctor.findFirst({
-      where: { cell_phone: field },
-    });
-  }
-
-  async findCep(field: any): Promise<Doctor> {
-    return await this.prismaService.doctor.findFirst({ where: { cep: field } });
-  }
-
-  async findSpecialty(field: any): Promise<Doctor> {
-    return await this.prismaService.doctor.findFirst({
-      where: { Specialty: field },
-    });
   }
 }

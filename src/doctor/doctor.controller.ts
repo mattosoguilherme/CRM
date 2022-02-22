@@ -36,21 +36,6 @@ export class DoctorController {
     return this.doctorService.findById(id);
   }
 
-  @Get('search/uf/:uf')
-  @ApiOperation({
-    summary: 'Busca no db todos os médicos com a uf indicada no parametro',
-  })
-  findDoctorsByUf(@Param('uf') uf: string): Promise<Doctor[]> {
-    return this.doctorService.findDoctorsByUf(uf);
-  }
-
-  @Get("/search/specialty/:spec")
-  @ApiOperation({summary:'Retorna todos os médicos com especialidade indicada no parametro, através do Id de especialidade.'})
-  findDoctorsBySpecialty(@Param('spec') spec: number): Promise<Doctor[]>{
-    return this.doctorService.findDoctorsBySpecialty(spec)
-  }
-
-
   @Patch(':id')
   @ApiOperation({ summary: 'Atualiza o cadastro do médico' })
   update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {

@@ -135,51 +135,8 @@ export class DoctorService {
     return await this.validation.findDoctorByCrm(field);
   }
 
-  async findDoctorsByUf(uf: string): Promise<Doctor[]> {
-    const doctorsFinded: Array<Doctor> = [];
 
-    const findUf = await this.prismaService.doctor.findFirst({
-      where: { uf: uf },
-    });
 
-    if (!findUf) {
-      throw new NotFoundException('Uf não existe ou não está cadastrada.');
-    }
-
-    const doctors = await this.prismaService.doctor.findMany();
-    console.log(doctors);
-    doctors.map((d) => {
-      if (d.uf === uf) {
-        console.log(d);
-        doctorsFinded.push(d);
-      }
-    });
-
-    return doctorsFinded;
-  }
-
-  async findDoctorsBySpecialty(spec: number): Promise<Doctor[]> {
-    const docFindedBySpec = await this.prismaService.doctor.findMany({
-      select: {
-        id: true,
-        name: true,
-        crm: true,
-        landline: true,
-        cell_phone: true,
-        cep: true,
-        logradouro: true,
-        bairro:true,
-        complement:true,
-        localidade: true,
-        uf: true,
-        Specialty: { select: { specialty: true } },
-        createdAT:true,
-        updatedAT:true,
-      },
-    });
-
-    return docFindedBySpec;
-  }
 
   async remove(id: string) {
     const doctor = await this.validation.findDoctorById(id);

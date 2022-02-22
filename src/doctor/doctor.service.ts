@@ -159,7 +159,24 @@ export class DoctorService {
   }
 
   async findDoctorsBySpecialty(spec: number): Promise<Doctor[]> {
-    const docFindedBySpec = await this.prismaService.doctor.findMany();
+    const docFindedBySpec = await this.prismaService.doctor.findMany({
+      select: {
+        id: true,
+        name: true,
+        crm: true,
+        landline: true,
+        cell_phone: true,
+        cep: true,
+        logradouro: true,
+        bairro:true,
+        complement:true,
+        localidade: true,
+        uf: true,
+        Specialty: { select: { specialty: true } },
+        createdAT:true,
+        updatedAT:true,
+      },
+    });
 
     return docFindedBySpec;
   }

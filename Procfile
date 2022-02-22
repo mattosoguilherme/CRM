@@ -1,1 +1,1 @@
-web: npm start:prop
+web: npm run start:dev

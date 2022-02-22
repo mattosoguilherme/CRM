@@ -9,10 +9,13 @@ import axios from 'axios';
 import { Doctor, Specialty } from '@prisma/client';
 import { CreateDoctorDto } from './doctor/dto/create-doctor.dto';
 
+// Classe validation onde ficam todas as validações
+
 @Injectable()
 export class Validation {
   constructor(private prismaService: PrismaService) {}
 
+  // SearchAdress busca na api do correios um cep e devolve no response as informações de endereço do cliente
   async SearchAdress(cep: string) {
     if (cep) {
       const numberCep = Number(cep);
@@ -37,6 +40,7 @@ export class Validation {
     }
   }
 
+  // crmValidator verifica no db se o crm ja está cadastrado
   async crmValidator(crm: string): Promise<Doctor> {
     const c = await this.prismaService.doctor.findUnique({
       where: { crm: crm },
@@ -49,6 +53,7 @@ export class Validation {
     return;
   }
 
+  // findDoctorByCrm procura no db o cliente pelo atributo único (crm)
   async findDoctorByCrm(crm: string): Promise<Doctor> {
     if (crm) {
       const crmFinded = await this.prismaService.doctor.findUnique({
@@ -63,6 +68,7 @@ export class Validation {
     }
   }
 
+  // findDoctorById procura no db o cliente pelo atributo único (id)
   async findDoctorById(id: string): Promise<Doctor> {
     const doctorFinded = await this.prismaService.doctor.findUnique({
       where: { id: id },
@@ -75,6 +81,7 @@ export class Validation {
     return doctorFinded;
   }
 
+  // fieldsValidator valida todos os campos de acordo com a regras négocio solitadas
   async fieldsValidator(field: CreateDoctorDto): Promise<CreateDoctorDto> {
     const { name, crm, landline, cell_phone, cep } = field;
 
@@ -136,10 +143,7 @@ export class Validation {
         arr[x] = arr[x].charAt(0).toUpperCase() + arr[x].slice(1);
       }
 
-      
-      const n = arr.join()
-      
-      const nEdited =  n.replace(',', " ")
+      const nEdited = arr.join().replace(',', ' ');
 
       const fieldEdited = {
         ...field,
@@ -181,15 +185,28 @@ export class Validation {
     return;
   }
 
-  async findSpecById(id: number): Promise<Specialty> {
-    const specFinded = await this.prismaService.specialty.findUnique({
-      where: { id: id },
+  // specValidate verifica se especilidade ja esta cadastrada
+  async specValidate(spec: string): Promise<Specialty> {
+    const s = await this.prismaService.specialty.findFirst({
+      where: { specialty: spec },
     });
 
-    if (!specFinded) {
-      throw new NotFoundException('Id da especialidade não encontrado.');
+    if (s) {
+      throw new ConflictException('Especialidade já cadastrada.');
     }
 
-    return specFinded;
+
+    return 
+  }
+
+  // findSpecById procura no db a especialidade pelo atributo único (id)
+  async findSpecById(id:number):Promise<Specialty>{
+    
+    const s = await this.prismaService.specialty.findUnique({where:{id:id}})
+    
+    if(!s){
+      throw new NotFoundException("Especialidade não encontrada")
+    }
+    return
   }
 }

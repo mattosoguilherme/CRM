@@ -1,21 +1,17 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { Specialty } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
+import { Validation } from 'src/validations';
 import { CreateSpecialtyDto } from './dto/create-specialty.dto';
 import { UpdateSpecialtyDto } from './dto/update-specialty.dto';
 
 @Injectable()
 export class SpecialtyService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService, private validation:Validation) {}
 
   async create(createSpecialtyDto: CreateSpecialtyDto): Promise<Specialty> {
-    const s = await this.prismaService.specialty.findFirst({
-      where: { specialty: createSpecialtyDto.specialty },
-    });
 
-    if (s) {
-      throw new ConflictException('Especialidade já cadastrada.');
-    }
+    await this.validation.specValidate(createSpecialtyDto.specialty)
 
     return await this.prismaService.specialty.create({
       data: createSpecialtyDto,
@@ -30,6 +26,9 @@ export class SpecialtyService {
     id: number,
     updateSpecialtyDto: UpdateSpecialtyDto,
   ): Promise<Specialty> {
+
+    await this.validation.specValidate(updateSpecialtyDto.specialty)
+    
     return await this.prismaService.specialty.update({
       where: { id: id },
       data: updateSpecialtyDto,

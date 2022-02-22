@@ -14,12 +14,10 @@ export class DoctorService {
   ) {}
 
   async create(createDoctorDto: CreateDoctorDto): Promise<Doctor> {
-    const {complement, cep, crm, cell_phone, specialty, landline } =
+    const { complement, cep, crm, cell_phone, specialty, landline } =
       createDoctorDto;
 
     const fieldEdited = await this.validation.fieldsValidator(createDoctorDto);
-
-    
 
     await this.validation.crmValidator(crm);
 
@@ -109,7 +107,24 @@ export class DoctorService {
   }
 
   async findAll(): Promise<Doctor[]> {
-    return await this.prismaService.doctor.findMany();
+    return await this.prismaService.doctor.findMany({
+      select: {
+        id: true,
+        name: true,
+        crm: true,
+        landline: true,
+        cell_phone: true,
+        cep: true,
+        logradouro: true,
+        bairro:true,
+        complement:true,
+        localidade: true,
+        uf: true,
+        Specialty: { select: { specialty: true } },
+        createdAT:true,
+        updatedAT:true,
+      },
+    });
   }
 
   async findById(id: string): Promise<Doctor> {
@@ -132,10 +147,10 @@ export class DoctorService {
     }
 
     const doctors = await this.prismaService.doctor.findMany();
-    console.log(doctors)
+    console.log(doctors);
     doctors.map((d) => {
       if (d.uf === uf) {
-        console.log(d)
+        console.log(d);
         doctorsFinded.push(d);
       }
     });
@@ -144,7 +159,7 @@ export class DoctorService {
   }
 
   async findDoctorsBySpecialty(spec: number): Promise<Doctor[]> {
-    const docFindedBySpec = await this.prismaService.doctor.findMany()
+    const docFindedBySpec = await this.prismaService.doctor.findMany();
 
     return docFindedBySpec;
   }

@@ -13,17 +13,17 @@ export class CreateDoctorDto {
   @IsString({message:"Esse campo precisar ser um texto."})
   crm: string;
 
-  @ApiProperty({default:'113333456'}) 
+  @ApiProperty({default:'0123456789'}) 
   @IsNotEmpty({message:"Você precisa preencher este campo."})
   @IsString({message:"Esse campo precisar ser um texto."})
   landline: string;
 
-  @ApiProperty({default:'11999998765'}) 
+  @ApiProperty({default:'00123456789'}) 
   @IsNotEmpty({message:"Você precisa preencher este campo."})
   @IsString({message:"Esse campo precisar ser um texto."})
   cell_phone: string;
 
-  @ApiProperty({default:'8710680'})
+  @ApiProperty({default:'25550000'})
   @IsNotEmpty({message:"Você precisa preencher este campo."}) 
   @IsString({message:"Esse campo precisar ser um texto."})
   cep: string;
@@ -33,7 +33,7 @@ export class CreateDoctorDto {
   @IsNotEmpty({message:"Você precisa preencher este campo."})
   complement:string;
 
-  @ApiProperty({default:'Cirurgia de tórax, Cirurgia cardíaca'}) 
+  @ApiProperty({default:[1,2,3,4,5,6,7,8]}) 
   @IsArray()
   @IsNotEmpty({message:"Você precisa preencher este campo."})
   specialty: number[];

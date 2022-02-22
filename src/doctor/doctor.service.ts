@@ -135,9 +135,6 @@ export class DoctorService {
     return await this.validation.findDoctorByCrm(field);
   }
 
-
-
-
   async remove(id: string) {
     const doctor = await this.validation.findDoctorById(id);
 

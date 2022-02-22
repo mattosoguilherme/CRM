@@ -30,7 +30,7 @@ export class Validation {
         })
         .catch((e) => {
           notAdress.push(e);
-          console.log(e)
+          console.log(e);
         });
 
       if (notAdress[0] || adress[0].erro) {
@@ -90,6 +90,18 @@ export class Validation {
 
     const hasDuplicates = (array) => new Set(array).size !== array.length;
 
+    const titleize = (text) => {
+      let words = text.toLowerCase().split(' ');
+
+      for (var a = 0; a < words.length; a++) {
+        var w = words[a];
+        words[a] = w[0].toUpperCase() + w.slice(1);
+        }
+
+     const e:string = words.join()
+      return e.replace(/,/g, " ");
+    };
+
     if (crm) {
       if (isNaN(Number(crm))) {
         throw new ConflictException(
@@ -138,13 +150,9 @@ export class Validation {
     }
 
     if (name) {
-      const arr = field.name.split(' ');
 
-      for (var x = 0; x < arr.length; x++) {
-        arr[x] = arr[x].charAt(0).toUpperCase() + arr[x].slice(1);
-      }
 
-      const nEdited = arr.join().replace(',', ' ');
+      const nEdited = titleize(name);
 
       const fieldEdited = {
         ...field,
@@ -196,18 +204,18 @@ export class Validation {
       throw new ConflictException('Especialidade já cadastrada.');
     }
 
-
-    return 
+    return;
   }
 
   // findSpecById procura no db a especialidade pelo atributo único (id)
-  async findSpecById(id:number):Promise<Specialty>{
-    
-    const s = await this.prismaService.specialty.findUnique({where:{id:id}})
-    
-    if(!s){
-      throw new NotFoundException("Especialidade não encontrada")
+  async findSpecById(id: number): Promise<Specialty> {
+    const s = await this.prismaService.specialty.findUnique({
+      where: { id: id },
+    });
+
+    if (!s) {
+      throw new NotFoundException('Especialidade não encontrada');
     }
-    return
+    return;
   }
 }

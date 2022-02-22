@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { Specialty } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
-import { Validation } from 'src/validations';
+import { Validation } from 'src/validations.service';
 import { CreateSpecialtyDto } from './dto/create-specialty.dto';
 import { UpdateSpecialtyDto } from './dto/update-specialty.dto';
 

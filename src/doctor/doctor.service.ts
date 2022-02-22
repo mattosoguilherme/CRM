@@ -4,7 +4,7 @@ import { Doctor } from '@prisma/client';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
-import { Validation } from 'src/validations';
+import { Validation } from 'src/validations.service';
 
 @Injectable()
 export class DoctorService {

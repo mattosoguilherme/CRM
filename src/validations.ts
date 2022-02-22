@@ -30,6 +30,7 @@ export class Validation {
         })
         .catch((e) => {
           notAdress.push(e);
+          throw new Error(e)
         });
 
       if (notAdress[0] || adress[0].erro) {
